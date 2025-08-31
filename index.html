@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع مشاركة النصوص</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .title {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .publish-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+
+        .publish-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .publish-btn:active {
+            transform: translateY(0);
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .text-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            resize: vertical;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: white;
+        }
+
+        .text-input::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        .popup {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+            min-width: 400px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .popup.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .link-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .link-text {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            background: transparent;
+            font-size: 0.9rem;
+            color: #333;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .copy-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn:hover {
+            background: #0056b3;
+        }
+
+        .share-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+        }
+
+        .shared-text-view {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .shared-text-container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+
+        .shared-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #333;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin-bottom: 2rem;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .main-content {
+                padding: 2rem;
+            }
+            
+            .popup {
+                min-width: 300px;
+                left: -100px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.3);
+            display: none;
+            z-index: 999;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="container">
+        <!-- الواجهة الرئيسية -->
+        <div id="main-view">
+            <div class="header">
+                <h1 class="title">مشاركة النصوص</h1>
+                <div style="position: relative;">
+                    <button class="publish-btn" id="publishBtn">نشر</button>
+                    <div class="popup" id="popup">
+                        <div class="success-message" id="successMessage">تم إنشاء الرابط بنجاح!</div>
+                        <div class="link-container">
+                            <input type="text" class="link-text" id="generatedLink" readonly>
+                            <button class="copy-btn" id="copyBtn">نسخ</button>
+                        </div>
+                        <button class="share-btn" id="shareBtn">مشاركة</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <textarea 
+                    class="text-input" 
+                    id="textInput" 
+                    placeholder="اكتب النص الذي تريد مشاركته هنا..."
+                ></textarea>
+            </div>
+        </div>
+
+        <!-- صفحة عرض النص المشارك -->
+        <div id="shared-view" class="shared-text-view">
+            <h1 class="title">النص المشارك</h1>
+            <div class="shared-text-container">
+                <div class="shared-text" id="sharedText"></div>
+                <a href="/" class="back-btn">العودة للصفحة الرئيسية</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class TextSharing {
+            constructor() {
+                this.initializeElements();
+                this.bindEvents();
+                this.checkForSharedText();
+            }
+
+            initializeElements() {
+                this.publishBtn = document.getElementById('publishBtn');
+                this.popup = document.getElementById('popup');
+                this.overlay = document.getElementById('overlay');
+                this.textInput = document.getElementById('textInput');
+                this.generatedLink = document.getElementById('generatedLink');
+                this.copyBtn = document.getElementById('copyBtn');
+                this.shareBtn = document.getElementById('shareBtn');
+                this.successMessage = document.getElementById('successMessage');
+                this.mainView = document.getElementById('main-view');
+                this.sharedView = document.getElementById('shared-view');
+                this.sharedText = document.getElementById('sharedText');
+            }
+
+            bindEvents() {
+                this.publishBtn.addEventListener('click', () => this.handlePublish());
+                this.copyBtn.addEventListener('click', () => this.copyLink());
+                this.shareBtn.addEventListener('click', () => this.openSharedLink());
+                this.overlay.addEventListener('click', () => this.hidePopup());
