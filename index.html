@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موقع مشاركة النصوص</title>
+    <title>مشاركة النصوص</title>
     <style>
         * {
             margin: 0;
@@ -15,84 +15,48 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            padding: 20px;
             direction: rtl;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
         }
 
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3rem;
             position: relative;
-        }
-
-        .title {
-            color: white;
-            font-size: 2.5rem;
-            font-weight: bold;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
         }
 
         .publish-btn {
+            position: absolute;
+            top: 0;
+            left: 0;
             background: linear-gradient(45deg, #4CAF50, #45a049);
             color: white;
             border: none;
             padding: 12px 24px;
-            font-size: 1.1rem;
             border-radius: 25px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-size: 16px;
             font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
         }
 
         .publish-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
         }
 
         .publish-btn:active {
             transform: translateY(0);
-        }
-
-        .main-content {
-            background: white;
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .text-input {
-            width: 100%;
-            min-height: 200px;
-            padding: 1.5rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            resize: vertical;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            background: #fafafa;
-        }
-
-        .text-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            background: white;
-        }
-
-        .text-input::placeholder {
-            color: #999;
-            font-style: italic;
         }
 
         .popup {
@@ -101,23 +65,23 @@
             left: 0;
             background: white;
             border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            min-width: 300px;
             display: none;
             z-index: 1000;
-            min-width: 400px;
-            border: 1px solid #e0e0e0;
+            border: 2px solid #4CAF50;
         }
 
         .popup.show {
             display: block;
-            animation: slideDown 0.3s ease-out;
+            animation: fadeInUp 0.3s ease;
         }
 
-        @keyframes slideDown {
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(10px);
             }
             to {
                 opacity: 1;
@@ -128,174 +92,194 @@
         .link-container {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 1rem;
-            padding: 10px;
-            background: #f8f9fa;
+            background: #f5f5f5;
             border-radius: 8px;
-            border: 1px solid #e9ecef;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
         }
 
         .link-text {
             flex: 1;
-            padding: 8px;
+            background: none;
             border: none;
-            background: transparent;
-            font-size: 0.9rem;
+            font-size: 14px;
             color: #333;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            outline: none;
+            direction: ltr;
+            text-align: left;
         }
 
         .copy-btn {
-            background: #007bff;
+            background: #2196F3;
             color: white;
             border: none;
             padding: 8px 12px;
-            border-radius: 6px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
+            margin-right: 10px;
+            font-size: 12px;
+            transition: background 0.3s ease;
         }
 
         .copy-btn:hover {
-            background: #0056b3;
+            background: #1976D2;
         }
 
         .share-btn {
-            width: 100%;
-            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            background: #FF9800;
             color: white;
             border: none;
             padding: 12px 24px;
-            font-size: 1rem;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            font-size: 16px;
             font-weight: bold;
+            width: 100%;
+            transition: all 0.3s ease;
         }
 
         .share-btn:hover {
+            background: #F57C00;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
         }
 
-        .shared-text-view {
-            display: none;
+        .title {
             text-align: center;
-            padding: 2rem;
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .shared-text-container {
-            background: white;
+        .input-container {
+            margin-bottom: 30px;
+        }
+
+        .text-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            font-size: 16px;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+            direction: rtl;
+        }
+
+        .text-input:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .text-input::placeholder {
+            color: #999;
+            direction: rtl;
+        }
+
+        .shared-content {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            margin-top: 2rem;
+            margin-top: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .shared-text {
-            font-size: 1.3rem;
-            line-height: 1.8;
+            font-size: 1.5em;
+            line-height: 1.6;
             color: #333;
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 15px;
+            border-right: 5px solid #4CAF50;
             white-space: pre-wrap;
             word-wrap: break-word;
-            margin-bottom: 2rem;
         }
 
         .back-btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #2196F3, #1976D2);
             color: white;
             border: none;
             padding: 12px 24px;
-            font-size: 1rem;
             border-radius: 25px;
             cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
             transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            font-weight: bold;
         }
 
         .back-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
         }
 
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            border: 1px solid #c3e6cb;
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
             display: none;
+            z-index: 1001;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.show {
+            display: block;
         }
 
         @media (max-width: 768px) {
             .container {
-                padding: 1rem;
-            }
-            
-            .title {
-                font-size: 2rem;
-            }
-            
-            .main-content {
-                padding: 2rem;
+                padding: 20px;
+                margin: 10px;
             }
             
             .popup {
-                min-width: 300px;
-                left: -100px;
+                left: -50px;
+                min-width: 250px;
             }
             
-            .header {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
+            .title {
+                font-size: 2em;
             }
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.3);
-            display: none;
-            z-index: 999;
-        }
-
-        .overlay.show {
-            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="overlay" id="overlay"></div>
-    
     <div class="container">
-        <!-- الواجهة الرئيسية -->
-        <div id="main-view">
-            <div class="header">
-                <h1 class="title">مشاركة النصوص</h1>
-                <div style="position: relative;">
-                    <button class="publish-btn" id="publishBtn">نشر</button>
-                    <div class="popup" id="popup">
-                        <div class="success-message" id="successMessage">تم إنشاء الرابط بنجاح!</div>
-                        <div class="link-container">
-                            <input type="text" class="link-text" id="generatedLink" readonly>
-                            <button class="copy-btn" id="copyBtn">نسخ</button>
-                        </div>
-                        <button class="share-btn" id="shareBtn">مشاركة</button>
-                    </div>
+        <div class="header">
+            <button class="publish-btn" id="publishBtn">نشر</button>
+            <div class="popup" id="popup">
+                <div class="link-container">
+                    <input type="text" class="link-text" id="linkText" readonly>
+                    <button class="copy-btn" id="copyBtn">نسخ</button>
                 </div>
+                <button class="share-btn" id="shareBtn">نشر</button>
             </div>
-            
-            <div class="main-content">
+        </div>
+
+        <div id="mainContent">
+            <h1 class="title">مشاركة النصوص</h1>
+            <div class="input-container">
                 <textarea 
                     class="text-input" 
                     id="textInput" 
@@ -304,40 +288,161 @@
             </div>
         </div>
 
-        <!-- صفحة عرض النص المشارك -->
-        <div id="shared-view" class="shared-text-view">
-            <h1 class="title">النص المشارك</h1>
-            <div class="shared-text-container">
-                <div class="shared-text" id="sharedText"></div>
-                <a href="/" class="back-btn">العودة للصفحة الرئيسية</a>
-            </div>
+        <div id="sharedContent" class="shared-content" style="display: none;">
+            <h2 class="title">النص المشارك</h2>
+            <div class="shared-text" id="displayText"></div>
+            <button class="back-btn" id="backBtn">العودة للصفحة الرئيسية</button>
         </div>
     </div>
 
+    <div class="notification" id="notification">
+        تم نسخ الرابط بنجاح!
+    </div>
+
     <script>
-        class TextSharing {
-            constructor() {
-                this.initializeElements();
-                this.bindEvents();
-                this.checkForSharedText();
+        // عناصر الصفحة
+        const publishBtn = document.getElementById('publishBtn');
+        const popup = document.getElementById('popup');
+        const linkText = document.getElementById('linkText');
+        const copyBtn = document.getElementById('copyBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const textInput = document.getElementById('textInput');
+        const mainContent = document.getElementById('mainContent');
+        const sharedContent = document.getElementById('sharedContent');
+        const displayText = document.getElementById('displayText');
+        const backBtn = document.getElementById('backBtn');
+        const notification = document.getElementById('notification');
+
+        // توليد ID عشوائي فريد
+        function generateUniqueId() {
+            return Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+        }
+
+        // تشفير النص لجعله آمن في الرابط
+        function encodeText(text) {
+            return btoa(encodeURIComponent(text));
+        }
+
+        // فك تشفير النص من الرابط
+        function decodeText(encodedText) {
+            try {
+                return decodeURIComponent(atob(encodedText));
+            } catch (e) {
+                return '';
+            }
+        }
+
+        // عرض الإشعار
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // إخفاء النافذة المنبثقة عند النقر خارجها
+        document.addEventListener('click', function(e) {
+            if (!publishBtn.contains(e.target) && !popup.contains(e.target)) {
+                popup.classList.remove('show');
+            }
+        });
+
+        // زر النشر - إظهار النافذة المنبثقة
+        publishBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            const text = textInput.value.trim();
+            if (!text) {
+                showNotification('يرجى إدخال نص أولاً!');
+                return;
             }
 
-            initializeElements() {
-                this.publishBtn = document.getElementById('publishBtn');
-                this.popup = document.getElementById('popup');
-                this.overlay = document.getElementById('overlay');
-                this.textInput = document.getElementById('textInput');
-                this.generatedLink = document.getElementById('generatedLink');
-                this.copyBtn = document.getElementById('copyBtn');
-                this.shareBtn = document.getElementById('shareBtn');
-                this.successMessage = document.getElementById('successMessage');
-                this.mainView = document.getElementById('main-view');
-                this.sharedView = document.getElementById('shared-view');
-                this.sharedText = document.getElementById('sharedText');
-            }
+            const uniqueId = generateUniqueId();
+            const encodedText = encodeText(text);
+            const baseUrl = window.location.origin + window.location.pathname;
+            const shareUrl = `${baseUrl}?id=${uniqueId}&text=${encodedText}`;
+            
+            linkText.value = shareUrl;
+            popup.classList.toggle('show');
+        });
 
-            bindEvents() {
-                this.publishBtn.addEventListener('click', () => this.handlePublish());
-                this.copyBtn.addEventListener('click', () => this.copyLink());
-                this.shareBtn.addEventListener('click', () => this.openSharedLink());
-                this.overlay.addEventListener('click', () => this.hidePopup());
+        // زر النسخ
+        copyBtn.addEventListener('click', function() {
+            linkText.select();
+            document.execCommand('copy');
+            showNotification('تم نسخ الرابط بنجاح!');
+        });
+
+        // زر المشاركة - الانتقال للرابط
+        shareBtn.addEventListener('click', function() {
+            const url = linkText.value;
+            if (url) {
+                window.open(url, '_blank');
+            }
+        });
+
+        // زر العودة
+        backBtn.addEventListener('click', function() {
+            // إزالة المعاملات من الرابط
+            const baseUrl = window.location.origin + window.location.pathname;
+            window.history.replaceState({}, document.title, baseUrl);
+            
+            mainContent.style.display = 'block';
+            sharedContent.style.display = 'none';
+            popup.classList.remove('show');
+            textInput.value = '';
+        });
+
+        // فحص الرابط عند تحميل الصفحة
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            const encodedText = urlParams.get('text');
+
+            if (id && encodedText) {
+                const decodedText = decodeText(encodedText);
+                if (decodedText) {
+                    displayText.textContent = decodedText;
+                    mainContent.style.display = 'none';
+                    sharedContent.style.display = 'block';
+                } else {
+                    showNotification('خطأ في قراءة النص المشارك!');
+                }
+            }
+        });
+
+        // إضافة تأثيرات تفاعلية للنافذة المنبثقة
+        popup.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.02)';
+        });
+
+        popup.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+
+        // تحسين تجربة المستخدم - إغلاق النافذة بالضغط على Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                popup.classList.remove('show');
+            }
+        });
+
+        // تحسين نسخ النص للمتصفحات الحديثة
+        if (navigator.clipboard) {
+            copyBtn.addEventListener('click', async function(e) {
+                e.preventDefault();
+                try {
+                    await navigator.clipboard.writeText(linkText.value);
+                    showNotification('تم نسخ الرابط بنجاح!');
+                } catch (err) {
+                    // fallback للطريقة القديمة
+                    linkText.select();
+                    document.execCommand('copy');
+                    showNotification('تم نسخ الرابط بنجاح!');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
